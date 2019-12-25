@@ -14,7 +14,9 @@ app.engine('hbs', hbs.engine)
 //Использование шаблонизатора
 app.set('view engine', 'hbs')
 //Настройка каталога шаблонов
-app.set('views', 'views/')
+app.set('views', 'views')
+
+app.use(express.static('public'))
 
 app.get('/', (request, response) => {
     response.render('index')
