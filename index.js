@@ -19,11 +19,27 @@ app.set('views', 'views')
 app.use(express.static('public'))
 
 app.get('/', (request, response) => {
-    response.render('index')
+    response.render('index', {
+        'title': 'Главная страница'
+    })
+})
+
+app.get('/add', (request, response) => {
+    response.render('add', {
+        'title': 'Добавить курс'
+    })
+})
+
+app.get('/courses', (request, response) => {
+    response.render('courses', {
+        'title': 'Список курсов'
+    })
 })
 
 app.get('/about', (request, response) => {
-    response.render('about')
+    response.render('about', {
+        'title': 'О нас'
+    })
 })
 
 const PORT = process.env.PORT || 3000
