@@ -9,11 +9,10 @@ class Course {
     price;
     img;
 
-    constructor(title, price, img) {
-        this.price = price;
-        this.img = img;
-        this.title = title;
+    constructor(attributes) {
         this.id = uuid()
+
+        this.fill(attributes)
     }
 
     toJSON() {
@@ -27,7 +26,15 @@ class Course {
 
     async save() {
         const courses = await Course.getAll()
-        courses.push(this.toJSON())
+
+        const index = courses.findIndex(c => c.id === this.id)
+        console.log(index)
+
+        if (index !== undefined) {
+            courses[index] = this.toJSON()
+        } else {
+            courses.push(this.toJSON())
+        }
 
         return new Promise((resolve, reject) => {
             fs.writeFile(
@@ -42,6 +49,17 @@ class Course {
                 }
             )
         })
+    }
+
+    fill(attributes) {
+        for (const attribute in attributes) {
+
+            if (attribute in this) {
+                this[attribute] = attributes[attribute]
+            }
+        }
+
+        return this
     }
 
     static getAll() {
@@ -64,7 +82,9 @@ class Course {
     static async getById(id) {
         const courses = await Course.getAll()
 
-        return courses.find(c => c.id === id)
+        const course = courses.find(c => c.id === id)
+
+        return course ? new Course(course) : null
     }
 }
 
