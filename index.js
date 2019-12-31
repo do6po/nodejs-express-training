@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const exphbs = require('express-handlebars')
 const homeRoutes = require('./routes/home')
 const addRoutes = require('./routes/add')
@@ -20,7 +21,7 @@ app.set('view engine', 'hbs')
 //Настройка каталога шаблонов
 app.set('views', 'views')
 
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(express.urlencoded({extended: true}))
 app.use('/', homeRoutes)

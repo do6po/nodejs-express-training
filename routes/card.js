@@ -19,4 +19,11 @@ router.get('/', async (request, response) => {
     })
 })
 
+
+router.delete('/remove/:id', async (request, response) => {
+    const card = await Card.remove(request.params.id)
+
+    response.status(200).json(card)
+
+})
 module.exports = router
