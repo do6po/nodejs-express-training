@@ -1,5 +1,7 @@
 const express = require('express')
+const env = require(`dotenv`)
 const path = require('path')
+const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const homeRoutes = require('./routes/home')
 const addRoutes = require('./routes/add')
@@ -13,6 +15,8 @@ const hbs = exphbs.create({
     defaultLayout: 'main',
     extname: 'hbs'
 })
+
+env.config()
 
 //Регистрация движка в приложении
 app.engine('hbs', hbs.engine)
@@ -32,6 +36,34 @@ app.use('/card', cardRoutes)
 
 const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => {
-    console.log(`Server is  running on port ${PORT}`)
-})
+const MONGO_ADDRESS = process.env.MONGO_ADDRESS
+const MONGO_PORT = process.env.MONGO_PORT
+const MONGO_USER = process.env.MONGO_USER
+const MONGO_PASSWORD = process.env.MONGO_PASSWORD
+const MONGO_DATABASE = process.env.MONGO_DATABASE
+
+const mongoConnectUrl = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_ADDRESS}:${MONGO_PORT}/${MONGO_DATABASE}`;
+
+// async function start() {
+//     try {
+//         await mongoose.connect(mongoConnectUrl, {useNewUrlParser: true, useUnifiedTopology: true})
+//
+//         app.listen(PORT, () => {
+//             console.log(`Server is  running on port ${PORT}`)
+//         })
+//     } catch (e) {
+//         console.log(e)
+//     }
+// }
+//
+// start()
+
+mongoose.connect(mongoConnectUrl, {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is  running on port ${PORT}`)
+        })
+    })
+    .catch((err) => {
+        console.log(err)
+    })

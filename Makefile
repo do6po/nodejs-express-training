@@ -32,3 +32,6 @@ db_bash:
 
 restart:
 	$(dc) restart
+
+run_dev:
+	npm run dev
