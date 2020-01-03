@@ -44,20 +44,6 @@ const MONGO_DATABASE = process.env.MONGO_DATABASE
 
 const mongoConnectUrl = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_ADDRESS}:${MONGO_PORT}/${MONGO_DATABASE}`;
 
-// async function start() {
-//     try {
-//         await mongoose.connect(mongoConnectUrl, {useNewUrlParser: true, useUnifiedTopology: true})
-//
-//         app.listen(PORT, () => {
-//             console.log(`Server is  running on port ${PORT}`)
-//         })
-//     } catch (e) {
-//         console.log(e)
-//     }
-// }
-//
-// start()
-
 mongoose.connect(mongoConnectUrl, {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
         app.listen(PORT, () => {

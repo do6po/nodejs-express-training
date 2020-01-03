@@ -4,7 +4,7 @@ const router = Router()
 
 router.get('/', async (request, response) => {
 
-    const courses = await Course.getAll()
+    const courses = await Course.find()
 
     response.render('courses', {
         'title': 'Список курсов',
@@ -13,7 +13,7 @@ router.get('/', async (request, response) => {
 })
 
 router.get('/:id', async (request, response) => {
-    const course = await Course.getById(request.params.id)
+    const course = await Course.findById(request.params.id)
 
     response.render('course', {
         layout: 'empty',
@@ -27,7 +27,7 @@ router.get('/:id/edit', async (request, response) => {
         return response.redirect('/')
     }
 
-    const course = await Course.getById(request.params.id)
+    const course = await Course.findById(request.params.id)
 
     response.render('course-edit', {
         title: `Редактировать ${course.title}`,
@@ -36,10 +36,7 @@ router.get('/:id/edit', async (request, response) => {
 })
 
 router.post('/:id/edit', async (request, response) => {
-    let course = await Course.getById(request.params.id)
-
-    course.fill(request.body)
-    await course.save()
+    const course = await Course.findByIdAndUpdate(request.params.id, request.body)
 
     response.redirect(`/courses/${course.id}/edit`)
 })
