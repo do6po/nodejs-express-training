@@ -23,9 +23,9 @@ router.get('/:id', async (request, response) => {
 })
 
 router.get('/:id/edit', async (request, response) => {
-    if (!request.query.allow) {
-        return response.redirect('/')
-    }
+    // if (!request.query.allow) {
+    //     return response.redirect('/')
+    // }
 
     const course = await Course.findById(request.params.id)
 
@@ -38,8 +38,20 @@ router.get('/:id/edit', async (request, response) => {
 router.post('/:id/edit', async (request, response) => {
     const course = await Course.findByIdAndUpdate(request.params.id, request.body)
 
-    response.redirect(`/courses/${course.id}/edit`)
+    response.redirect(`/courses/${course._id}/edit`)
 })
 
+
+router.post('/:id/delete', async (request, response) => {
+    try {
+        await Course.deleteOne({
+            _id: request.params.id
+        })
+        response.redirect('/courses')
+    } catch (e) {
+        console.log(e)
+    }
+
+})
 
 module.exports = router
