@@ -9,6 +9,8 @@ const coursesRoutes = require('./routes/courses')
 const aboutRoutes = require('./routes/about')
 const cardRoutes = require('./routes/card')
 
+const User = require('./models/user')
+
 const app = express()
 
 const hbs = exphbs.create({
@@ -24,6 +26,18 @@ app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs')
 //Настройка каталога шаблонов
 app.set('views', 'views')
+
+app.use(async (request, response, next) => {
+    try {
+        request.user = await User.findOne({
+            email: "box@example.com"
+        })
+        next()
+    } catch (e) {
+        console.log(e)
+    }
+
+})
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -49,7 +63,20 @@ mongoose.connect(mongoConnectUrl, {
     useUnifiedTopology: true,
     useFindAndModify: false,
 })
-    .then(() => {
+    .then(async () => {
+
+        const candidate = await User.findOne()
+
+        if (!candidate) {
+            const user = new User({
+                email: 'box@example.com',
+                name: 'username',
+                cart: {items: []}
+            })
+
+            await user.save()
+        }
+
         app.listen(PORT, () => {
             console.log(`Server is  running on port ${PORT}`)
         })
