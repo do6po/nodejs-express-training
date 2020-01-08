@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 
+/**
+ * @property _id
+ */
 const course = new mongoose.Schema({
     title: {
         type: String,
