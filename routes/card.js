@@ -2,23 +2,46 @@ const {Router} = require('express')
 const Course = require('../models/course')
 const router = Router()
 
+/**
+ *
+ * @param {Cart} cart
+ */
+function mapCartItems(cart) {
+    return cart.items.map(c => ({
+        ...c.courseId._doc,
+        count: c.count
+    }))
+}
+
+/**
+ *
+ * @param [Course] courses
+ */
+function computePrice(courses) {
+    return courses.reduce((total, course) => {
+        return total + course.price * course.count
+    }, 0)
+}
+
 router.post('/add', async (request, response) => {
-    const course = await  Course.findById(request.body.id)
+    const course = await Course.findById(request.body.id)
 
     await request.user.addToCart(course)
 
-    return response.status(200).json({
-        status: true
-    })
-    // response.redirect('/card')
+    return response.redirect('/card')
 })
 
 router.get('/', async (request, response) => {
-    const card = await Card.fetch()
+    const user = await request.user
+        .populate('cart.items.courseId')
+        .execPopulate()
+
+    const courses = mapCartItems(user.cart)
+
     response.render('card', {
         title: 'Корзина',
-        courses: card.courses,
-        price: card.price
+        courses,
+        price: computePrice(courses)
     })
 })
 
