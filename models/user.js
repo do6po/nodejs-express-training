@@ -1,5 +1,6 @@
+const r = require('app-root-path').require
 const mongoose = require('mongoose')
-const Course = require('../models/course')
+const Course = r('/models/course')
 
 
 const userSchema = new mongoose.Schema({
