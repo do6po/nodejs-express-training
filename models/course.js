@@ -21,4 +21,12 @@ const course = new mongoose.Schema({
     }
 })
 
+course.method('toClient', function() {
+    const course = this.toObject()
+
+    course.id = course._id
+
+    return course
+})
+
 module.exports = mongoose.model('Course', course)
