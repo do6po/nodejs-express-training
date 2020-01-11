@@ -1,6 +1,5 @@
-const r = require('app-root-path').require
 const {Router} = require('express')
-const Order = r('/models/order')
+const Order = require('../models/order')
 const router = Router()
 
 
@@ -11,22 +10,21 @@ router.get('/', async (request, response) => {
             'user.userId': request.user._id
         }).populate('user.userId')
 
-
         response.render('orders', {
             title: 'Заказы',
             orders: orders.map(o => {
                 return {
                     ...o._doc,
                     price: o.courses.reduce((total, c) => {
+
                         return c.count * c.course.price
                     }, 0)
                 }
             })
         })
     } catch (e) {
-
+        console.log(e)
     }
-
 
 })
 
@@ -36,7 +34,7 @@ router.post('/', async (request, response) => {
 
         const courses = user.cart.items.map(i => ({
             count: i.count,
-            courses: {...i.courseId._doc}
+            course: {...i.courseId._doc}
         }))
 
         const order = new Order({
