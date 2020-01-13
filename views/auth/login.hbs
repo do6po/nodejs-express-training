@@ -1,0 +1,54 @@
+<div class="auth">
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s6"><a class="active" href="#login">Вход</a></li>
+                <li class="tab col s6"><a href="#register">Регистрация</a></li>
+            </ul>
+        </div>
+        <div id="login" class="col s6 offset-s3">
+            <h1>Войти в магазин</h1>
+            <form action="/auth/login" method="post">
+                <div class="input-field">
+                    <input name="email" type="text" id="email" class="validate" required>
+                    <label for="email">Почта</label>
+                    <span class="helper-text" data-error="Введите почту" data-success="right"></span>
+                </div>
+
+                <div class="input-field">
+                    <input name="password" type="password" id="password" class="validate" required>
+                    <label for="password">Пароль</label>
+                    <span class="helper-text" data-error="Пароль" data-success="right"></span>
+                </div>
+
+                <button class="btn btn-primary" type="submit">
+                    Вход
+                </button>
+            </form>
+        </div>
+        <div id="register" class="col s16 offset-s3">
+            <h1>Регистрация</h1>
+            <form action="/auth/register" method="post">
+                <div class="input-field">
+                    <input name="remail" type="text" id="remail" class="validate" required>
+                    <label for="remail">Почта</label>
+                    <span class="helper-text" data-error="Введите почту" data-success="right"></span>
+                </div>
+
+                <div class="input-field">
+                    <input name="rpassword" type="password" id="rpassword" class="validate" required>
+                    <label for="rpassword">Пароль</label>
+                    <span class="helper-text" data-error="Пароль" data-success="right"></span>
+                </div>
+                <div class="input-field">
+                    <input name="confirm" type="password" id="confirm" class="validate" required>
+                    <label for="confirm">Повторите пароль</label>
+                    <span class="helper-text" data-error="Подтвердите пароль" data-success="right"></span>
+                </div>
+                <button class="btn btn-primary" type="submit">
+                    Регистрация
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
