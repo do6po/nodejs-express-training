@@ -14,8 +14,6 @@ const authRoutes = require('./routes/auth')
 
 const varMiddleware = require('./middlewares/variables')
 
-const User = require('./models/user')
-
 const app = express()
 
 const hbs = exphbs.create({
@@ -31,18 +29,6 @@ app.engine('hbs', hbs.engine)
 app.set('view engine', 'hbs')
 //Настройка каталога шаблонов
 app.set('views', 'views')
-
-app.use(async (request, response, next) => {
-    try {
-        request.user = await User.findOne({
-            email: "box@example.com"
-        })
-        next()
-    } catch (e) {
-        console.log(e)
-    }
-
-})
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
@@ -78,19 +64,6 @@ mongoose.connect(mongoConnectUrl, {
     useFindAndModify: false,
 })
     .then(async () => {
-
-        const candidate = await User.findOne()
-
-        if (!candidate) {
-            const user = new User({
-                email: 'box@example.com',
-                name: 'username',
-                cart: {items: []}
-            })
-
-            await user.save()
-        }
-
         app.listen(PORT, () => {
             console.log(`Server is  running on port ${PORT}`)
         })
