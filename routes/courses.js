@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const Course = require('../models/course')
 const router = Router()
+const auth = require('../middlewares/auth')
 
 router.get('/', async (request, response) => {
 
@@ -22,7 +23,7 @@ router.get('/:id', async (request, response) => {
     })
 })
 
-router.get('/:id/edit', async (request, response) => {
+router.get('/:id/edit', auth, async (request, response) => {
     // if (!request.query.allow) {
     //     return response.redirect('/')
     // }
@@ -35,7 +36,7 @@ router.get('/:id/edit', async (request, response) => {
     })
 })
 
-router.post('/:id/edit', async (request, response) => {
+router.post('/:id/edit', auth, async (request, response) => {
     const course = await Course.findByIdAndUpdate(request.params.id, request.body)
 
     response.redirect(`/courses/${course._id}/edit`)
