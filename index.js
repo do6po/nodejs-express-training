@@ -14,6 +14,8 @@ const cardRoutes = require('./routes/card')
 const authRoutes = require('./routes/auth')
 
 const varMiddleware = require('./middlewares/variables')
+const userMiddleware = require('./middlewares/user')
+
 
 const app = express()
 
@@ -56,6 +58,7 @@ app.use(session({
 }))
 
 app.use(varMiddleware)
+app.use(userMiddleware)
 
 app.use('/', homeRoutes)
 app.use('/add', addRoutes)

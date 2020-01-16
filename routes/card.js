@@ -21,7 +21,7 @@ function mapCartItems(cart) {
  */
 function computePrice(courses) {
     return courses.reduce((total, course) => {
-        return total + course.price * course.count
+        return total += course.price * course.count
     }, 0)
 }
 
