@@ -51,6 +51,32 @@ class AuthController {
         await request.session.destroy()
         return response.redirect('/auth/login#login')
     }
+
+    async register(request, response) {
+        try {
+            const {email, name, password, confirm} = request.body
+            const candidate = await User.findOne({email})
+
+            if (candidate) {
+                return response.redirect('/auth/login#register')
+            }
+
+            const user = new User({
+                email,
+                name,
+                password,
+                cart: {
+                    items: []
+                }
+            })
+
+            await user.save()
+
+            return response.redirect('/auth/login#login')
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 module.exports = AuthController
