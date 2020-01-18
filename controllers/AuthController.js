@@ -47,6 +47,7 @@ class AuthController {
             console.log(e)
         }
 
+        return response.redirect('/')
     }
 
     /**
