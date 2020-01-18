@@ -25,26 +25,28 @@ class AuthController {
      */
     async login(request, response) {
 
-        const user = await User.findOne({
-            email: request.body.email
-        })
+        try {
+            const user = await User.findOne({
+                email: request.body.email
+            })
 
-        if (!user) {
-            return response.redirect('/auth/login#login')
-        }
-
-        request.session.user = {
-            _id: user._id,
-            email: user.email,
-        }
-
-        request.session.save(err => {
-            if (err) {
-                throw err
+            if (!user || user.password !== request.body.password) {
+                return response.redirect('/auth/login#login')
             }
 
-            return response.redirect('/')
-        })
+            request.session.user = (({_id, name}) => ({_id, name}))(user)
+
+            request.session.save(err => {
+                if (err) {
+                    throw err
+                }
+
+                return response.redirect('/')
+            })
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     /**
