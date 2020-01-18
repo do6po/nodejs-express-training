@@ -1,7 +1,7 @@
 module.exports = function (request, response, next) {
-    if (!request.session.isAuthenticated) {
+    if (!request.session.user) {
         return response.redirect('/auth/login')
     }
 
-    next()
+    return next()
 }

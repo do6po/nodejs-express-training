@@ -12,7 +12,7 @@ services:
     networks:
       default:
     ports:
-      - ${MONGO_ADDRESS}:${MONGO_PORT}:${MONGO_PORT}
+      - ${MONGO_PORT}:${MONGO_PORT}
     volumes:
       - ./docker/db/mongodb:/var/lib/mongodb:rw
       - ./docker/db/mongodata:/data/db:rw

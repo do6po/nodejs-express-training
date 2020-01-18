@@ -25,11 +25,18 @@ class AuthController {
      */
     async login(request, response) {
 
-        request.user = await User.findOne({
-            email: "box@example.com"
+        const user = await User.findOne({
+            email: request.body.email
         })
 
-        request.session.isAuthenticated = true
+        if (!user) {
+            return response.redirect('/auth/login#login')
+        }
+
+        request.session.user = {
+            _id: user._id,
+            email: user.email,
+        }
 
         request.session.save(err => {
             if (err) {
@@ -54,17 +61,19 @@ class AuthController {
 
     async register(request, response) {
         try {
-            const {email, name, password, confirm} = request.body
-            const candidate = await User.findOne({email})
+            const {remail, name, rpassword, confirm} = request.body
+            const candidate = await User.findOne({
+                email: remail
+            })
 
             if (candidate) {
                 return response.redirect('/auth/login#register')
             }
 
             const user = new User({
-                email,
+                email: remail,
                 name,
-                password,
+                password: rpassword,
                 cart: {
                     items: []
                 }
