@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const bcrypt = require('bcryptjs')
 
 class AuthController {
 
@@ -26,23 +27,23 @@ class AuthController {
     async login(request, response) {
 
         try {
-            const user = await User.findOne({
-                email: request.body.email
-            })
+            const {email, password} = request.body
 
-            if (!user || user.password !== request.body.password) {
+            const user = await User.findOne({email})
+
+            if (!user) {
+                return response.redirect('/auth/login#login')
+            }
+
+            if (!await this._passwordCompare(password, user.password)) {
                 return response.redirect('/auth/login#login')
             }
 
             request.session.user = (({_id, name}) => ({_id, name}))(user)
 
-            request.session.save(err => {
-                if (err) {
-                    throw err
-                }
+            await request.session.save()
 
-                return response.redirect('/')
-            })
+            return response.redirect('/')
         } catch (e) {
             console.log(e)
         }
@@ -76,7 +77,7 @@ class AuthController {
             const user = new User({
                 email: remail,
                 name,
-                password: rpassword,
+                password: await this._passwordHash(rpassword),
                 cart: {
                     items: []
                 }
@@ -88,6 +89,19 @@ class AuthController {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    /**
+     *
+     * @param {String} password
+     * @private
+     */
+    _passwordHash(password) {
+        return bcrypt.hash(password, 10)
+    }
+
+    _passwordCompare(password, hash) {
+        return bcrypt.compare(password, hash)
     }
 }
 

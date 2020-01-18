@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db:
-    image: bitnami/mongodb:4.0
+    image: bitnami/mongodb:3.6
     container_name: ${APP_NAME}_db
     hostname: ${APP_NAME}_db
     environment:
@@ -14,7 +14,6 @@ services:
     ports:
       - ${MONGO_PORT}:${MONGO_PORT}
     volumes:
-      - ./docker/db/mongodb:/var/lib/mongodb:rw
       - ./docker/db/mongodata:/data/db:rw
     restart: always
 
