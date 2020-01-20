@@ -17,6 +17,7 @@
                     <a href="/courses/{{ id }}/edit?allow=1" target="_blank">Изменить</a>
                     <form action="/card/add" method="post">
                         <input type="hidden" name="id" value="{{id}}">
+                        <input type="hidden" name="_csrf" value="{{ @root.csrf }}">
                         <button type="submit" class="btn btn-primary">Купить</button>
                     </form>
                     {{/if}}

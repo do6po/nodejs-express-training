@@ -19,11 +19,14 @@
         <span class="helper-text" data-error="Введите текст ссылки" data-success="right"></span>
     </div>
 
+    <input type="hidden" name="_csrf" value="{{ csrf }}">
+
     <button class="btn btn-primary" type="submit">
         Сохранить
     </button>
 </form>
 
 <form action="/courses/{{course.id}}/delete" method="post" style="margin-top: 2rem" >
+    <input type="hidden" name="_csrf" value="{{ csrf }}">
     <button class="bnt btn-small red" >Удалить курс</button>
 </form>
