@@ -18,7 +18,6 @@ const authRoutes = require('./routes/auth')
 const varMiddleware = require('./middlewares/variables')
 const userMiddleware = require('./middlewares/user')
 
-
 const app = express()
 
 const hbs = exphbs.create({
@@ -28,15 +27,9 @@ const hbs = exphbs.create({
 
 env.config()
 
-const PORT = process.env.PORT || 3000
+const ENV = process.env
 
-const MONGO_ADDRESS = process.env.MONGO_ADDRESS
-const MONGO_PORT = process.env.MONGO_PORT
-const MONGO_USER = process.env.MONGO_USER
-const MONGO_PASSWORD = process.env.MONGO_PASSWORD
-const MONGO_DATABASE = process.env.MONGO_DATABASE
-
-const mongoConnectUrl = `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_ADDRESS}:${MONGO_PORT}/${MONGO_DATABASE}`;
+const mongoConnectUrl = `mongodb://${ENV.MONGO_USER}:${ENV.MONGO_PASSWORD}@${ENV.MONGO_ADDRESS}:${ENV.MONGO_PORT}/${ENV.MONGO_DATABASE}`;
 
 const store = new MongoStore({
     collection: 'sessions',
@@ -53,12 +46,12 @@ app.set('views', 'views')
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended: true}))
 app.use(session({
-    secret: 'some secret string',
+    secret: ENV.KEY,
     resave: false,
     saveUninitialized: false,
     store
 }))
-app.use(csrf())
+app.use(csrf(null))
 app.use(flash())
 
 app.use(varMiddleware)
@@ -72,16 +65,14 @@ app.use('/card', cardRoutes)
 app.use('/orders', ordersRoutes)
 app.use('/auth', authRoutes)
 
-
-
 mongoose.connect(mongoConnectUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
 })
     .then(async () => {
-        app.listen(PORT, () => {
-            console.log(`Server is  running on port ${PORT}`)
+        app.listen(ENV.PORT, () => {
+            console.log(`Server is  running on port ${ENV.PORT}`)
         })
     })
     .catch((err) => {
