@@ -13,7 +13,9 @@ class AuthController {
     async signIn(request, response) {
         return response.render('auth/login', {
             title: 'Авторизация',
-            isLogin: true
+            isLogin: true,
+            registerError: request.flash('registerError'),
+            loginError: request.flash('loginError'),
         })
     }
 
@@ -32,10 +34,14 @@ class AuthController {
             const user = await User.findOne({email})
 
             if (!user) {
+                request.flash('loginError', 'Ошибка входа. Такого пользователя не существует.')
+
                 return response.redirect('/auth/login#login')
             }
 
             if (!await this._passwordCompare(password, user.password)) {
+                request.flash('loginError', 'Неверный пароль')
+
                 return response.redirect('/auth/login#login')
             }
 
@@ -71,6 +77,8 @@ class AuthController {
             })
 
             if (candidate) {
+                request.flash('registerError', 'Email занят.')
+
                 return response.redirect('/auth/login#register')
             }
 
