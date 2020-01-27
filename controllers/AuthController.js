@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
+const {validationResult} = require('express-validator')
 
 class AuthController {
 
@@ -75,6 +76,14 @@ class AuthController {
             const candidate = await User.findOne({
                 email: remail
             })
+
+            const errors = validationResult(request)
+
+            if (!errors.isEmpty()) {
+                request.flash('registerError', errors.array()[0].msg)
+
+                return response.status(422).redirect('/auth/login#register')
+            }
 
             if (candidate) {
                 request.flash('registerError', 'Email занят.')
