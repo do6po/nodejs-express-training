@@ -1,7 +1,8 @@
 const {Router} = require('express')
-const {body} = require('express-validator')
 const router = Router()
 const AuthController = require('../controllers/AuthController')
+const {registerValidators} = require('../utils/validators')
+
 
 const auth = new AuthController()
 
@@ -11,7 +12,7 @@ router.get('/logout', (request, response) => auth.logout(request, response))
 
 router.post(
     '/register',
-    body('email').isEmail(),
+    registerValidators,
     (request, response) => auth.register(request, response)
 )
 

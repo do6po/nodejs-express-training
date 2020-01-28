@@ -72,10 +72,8 @@ class AuthController {
 
     async register(request, response) {
         try {
-            const {remail, name, rpassword, confirm} = request.body
-            const candidate = await User.findOne({
-                email: remail
-            })
+            const {email, name, rpassword, confirm} = request.body
+            const candidate = await User.findOne({email})
 
             const errors = validationResult(request)
 
