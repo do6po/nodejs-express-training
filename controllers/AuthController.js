@@ -90,7 +90,7 @@ class AuthController {
             }
 
             const user = new User({
-                email: remail,
+                email,
                 name,
                 password: await this._passwordHash(rpassword),
                 cart: {

@@ -1,8 +1,7 @@
 const {Router} = require('express')
 const router = Router()
 const AuthController = require('../controllers/AuthController')
-const {registerValidators} = require('../utils/validators')
-
+const {registerValidator} = require('../validators/register')
 
 const auth = new AuthController()
 
@@ -12,7 +11,7 @@ router.get('/logout', (request, response) => auth.logout(request, response))
 
 router.post(
     '/register',
-    registerValidators,
+    registerValidator,
     (request, response) => auth.register(request, response)
 )
 
