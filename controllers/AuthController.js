@@ -72,21 +72,13 @@ class AuthController {
 
     async register(request, response) {
         try {
-            const {email, name, rpassword, confirm} = request.body
-            const candidate = await User.findOne({email})
-
+            const {email, name, rpassword} = request.body
             const errors = validationResult(request)
 
             if (!errors.isEmpty()) {
                 request.flash('registerError', errors.array()[0].msg)
 
                 return response.status(422).redirect('/auth/login#register')
-            }
-
-            if (candidate) {
-                request.flash('registerError', 'Email занят.')
-
-                return response.redirect('/auth/login#register')
             }
 
             const user = new User({
