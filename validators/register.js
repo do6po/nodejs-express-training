@@ -2,8 +2,9 @@ const {body} = require('express-validator')
 const User = require('../models/user')
 
 exports.registerValidator = [
-    body('email', 'Введите корректный email.')
+    body('email')
         .isEmail()
+        .withMessage('Введите корректный email.')
         .custom(async (value) => {
             try {
                 if (await User.findOne({email: value})) {
@@ -12,15 +13,19 @@ exports.registerValidator = [
             } catch (e) {
                 console.log(e)
             }
-        }),
+        })
+        .normalizeEmail(),
 
-    body('rpassword', 'Пароль должен быть минимум 6 символов.')
-        .isLength({min: 6, max: 56}),
+    body('rpassword', )
+        .isLength({min: 6, max: 56}).withMessage('Пароль должен быть минимум 6 символов.')
+        .trim(),
 
     body('confirm')
         .custom((value, {req}) => value === req.body.rpassword)
-        .withMessage('Пароли должны совпадать.'),
+        .withMessage('Пароли должны совпадать.')
+        .trim(),
 
-    body('name', 'Имя должно быть минимум 3 символа.')
-        .isLength({min: 3})
+    body('name')
+        .isLength({min: 3}).withMessage('Имя должно быть минимум 3 символа.')
+        .trim()
 ]
