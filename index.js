@@ -17,6 +17,7 @@ const authRoutes = require('./routes/auth')
 
 const varMiddleware = require('./middlewares/variables')
 const userMiddleware = require('./middlewares/user')
+const errorMiddleware = require('./middlewares/error')
 
 const app = express()
 
@@ -64,6 +65,8 @@ app.use('/about', aboutRoutes)
 app.use('/card', cardRoutes)
 app.use('/orders', ordersRoutes)
 app.use('/auth', authRoutes)
+
+app.use(errorMiddleware)
 
 mongoose.connect(mongoConnectUrl, {
     useNewUrlParser: true,
