@@ -7,13 +7,8 @@ const session = require('express-session')
 const csrf = require('csurf')
 const flash = require('connect-flash')
 const MongoStore = require('connect-mongodb-session')(session)
-const homeRoutes = require('./routes/home')
-const addRoutes = require('./routes/add')
-const ordersRoutes = require('./routes/orders')
-const coursesRoutes = require('./routes/courses')
-const aboutRoutes = require('./routes/about')
-const cardRoutes = require('./routes/card')
-const authRoutes = require('./routes/auth')
+
+const routes = require('./routes/main')
 
 const varMiddleware = require('./middlewares/variables')
 const userMiddleware = require('./middlewares/user')
@@ -58,13 +53,9 @@ app.use(flash())
 app.use(varMiddleware)
 app.use(userMiddleware)
 
-app.use('/', homeRoutes)
-app.use('/add', addRoutes)
-app.use('/courses', coursesRoutes)
-app.use('/about', aboutRoutes)
-app.use('/card', cardRoutes)
-app.use('/orders', ordersRoutes)
-app.use('/auth', authRoutes)
+for (const key in routes) {
+    app.use(key, routes[key])
+}
 
 app.use(errorMiddleware)
 
