@@ -1,6 +1,3 @@
-const express = require('express')
-const env = require(`dotenv`)
-const path = require('path')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const session = require('express-session')
@@ -13,17 +10,15 @@ const routes = require('./routes/main')
 const varMiddleware = require('./middlewares/variables')
 const userMiddleware = require('./middlewares/user')
 const errorMiddleware = require('./middlewares/error')
+const fileMiddleware = require('./middlewares/file')
 
-const app = express()
+const app = require('./bootstrap/app')
+const ENV = require('./bootstrap/env')
 
 const hbs = exphbs.create({
     defaultLayout: 'main',
     extname: 'hbs'
 })
-
-env.config()
-
-const ENV = process.env
 
 const mongoConnectUrl = `mongodb://${ENV.MONGO_USER}:${ENV.MONGO_PASSWORD}@${ENV.MONGO_ADDRESS}:${ENV.MONGO_PORT}/${ENV.MONGO_DATABASE}`;
 
@@ -39,14 +34,14 @@ app.set('view engine', 'hbs')
 //Настройка каталога шаблонов
 app.set('views', 'views')
 
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(express.urlencoded({extended: true}))
 app.use(session({
     secret: ENV.KEY,
     resave: false,
     saveUninitialized: false,
     store
 }))
+
+app.use(fileMiddleware.single('avatar'))
 app.use(csrf(null))
 app.use(flash())
 
