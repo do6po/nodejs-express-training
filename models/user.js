@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
+    avatarUrl: String,
     cart: {
         items: [
             {
@@ -80,7 +81,7 @@ userSchema.methods.removeFromCart = function (id) {
     return this.save()
 }
 
-userSchema.methods.clearCart = function() {
+userSchema.methods.clearCart = function () {
     this.cart = {items: []}
 
     return this.save()

@@ -5,7 +5,7 @@ const ProfileController = require('../controllers/ProfileController')
 
 const profile = new ProfileController()
 
-router.get('/', async (req, res) => profile.show(req, res))
-router.post('/', async (req, res) => profile.update(req, res))
+router.get('/', auth, async (req, res) => profile.show(req, res))
+router.post('/', auth, async (req, res) => profile.update(req, res))
 
 module.exports = router
