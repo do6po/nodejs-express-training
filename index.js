@@ -4,6 +4,8 @@ const session = require('express-session')
 const csrf = require('csurf')
 const flash = require('connect-flash')
 const MongoStore = require('connect-mongodb-session')(session)
+const helmet = require('helmet')
+const compression = require('compression')
 
 const routes = require('./routes/main')
 
@@ -44,6 +46,8 @@ app.use(session({
 app.use(fileMiddleware.single('avatar'))
 app.use(csrf(null))
 app.use(flash())
+app.use(helmet()) //Настройка Хедеров
+app.use(compression()) //Сжимание потока
 
 app.use(varMiddleware)
 app.use(userMiddleware)
